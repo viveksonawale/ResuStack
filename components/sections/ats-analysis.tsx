@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Upload, ChevronDown, ChevronUp, CheckCircle2 } from "lucide-react";
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useModal } from "@/components/providers/modal-provider";
 
@@ -37,41 +36,30 @@ export function ATSAnalysis() {
     // Derived values for animations
     const normalizedScore = (score - 70) / 25;
 
+    // Calculate category scores based on total score percentage
+    // We assume the random score (75-98) maps roughly to high performance in categories
+    const categoryScores = categories.map(cat => ({
+        ...cat,
+        currentScore: Math.round((score / 100) * cat.max)
+    }));
+
     return (
-        <section id="upload" className="relative w-full overflow-hidden bg-background py-10 md:py-16">
+        <section id="upload" className="relative w-full overflow-hidden bg-background py-20 md:py-32">
             <div className="container relative z-10 px-4 md:px-6 mx-auto max-w-7xl">
 
                 {/* Heading Section */}
-                <div className="text-center mb-8 space-y-2">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
-                        className="text-2xl md:text-3xl font-bold tracking-tight"
-                    >
+                <div className="text-center mb-16 space-y-4 animate-fade-in-up">
+                    <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
                         Upload Your Resume to Start for Free
-                    </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-xs md:text-sm text-muted-foreground max-w-xl mx-auto"
-                    >
+                    </h2>
+                    <p className="text-sm md:text-base text-muted-foreground max-w-xl mx-auto">
                         Get your ResuStack Score instantly and discover how to maximize your resume's impact.
-                    </motion.p>
+                    </p>
                 </div>
 
                 {/* Dashboard Card */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="max-w-4xl mx-auto"
-                >
-                    <div className="bg-gradient-to-br from-[#0f172a] to-[#1e293b] rounded-3xl p-8 md:p-10 shadow-2xl border border-slate-700/50 relative overflow-hidden">
+                <div className="max-w-4xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                    <div className="bg-gradient-to-br from-[#0f172a] to-[#1e293b] rounded-3xl p-6 md:p-12 shadow-2xl border border-slate-700/50 relative overflow-hidden">
                         {/* Subtle background pattern */}
                         <div className="absolute inset-0 opacity-5">
                             <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
@@ -82,12 +70,8 @@ export function ATSAnalysis() {
                             {/* Left Column: Gauge */}
                             <div className="flex flex-col items-center justify-center border-r-0 md:border-r border-slate-700/50 pr-0 md:pr-10">
                                 <div className="relative mb-6">
-                                    {/* Gauge Glow */}
-                                    <motion.div
-                                        className="absolute inset-0 bg-cyan-500/10 blur-3xl rounded-full transform -translate-y-1/2"
-                                        animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.1, 1] }}
-                                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                                    />
+                                    {/* Gauge Glow - Optimized */}
+                                    <div className="absolute inset-0 bg-cyan-500/10 blur-3xl rounded-full transform -translate-y-1/2 animate-pulse-slow pointer-events-none" />
 
                                     <div className="relative w-56 h-28 overflow-hidden">
                                         {/* Gauge Background Track */}
@@ -103,7 +87,7 @@ export function ATSAnalysis() {
                                                 strokeWidth="12"
                                                 strokeDasharray="126"
                                                 strokeDashoffset={126 - (126 * score) / 100}
-                                                className="transition-[stroke-dashoffset] duration-1000 ease-in-out"
+                                                className="transition-[stroke-dashoffset] duration-1000 ease-in-out will-change-[stroke-dashoffset]"
                                             />
                                             <defs>
                                                 <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -115,7 +99,7 @@ export function ATSAnalysis() {
 
                                         {/* Needle */}
                                         <div
-                                            className="absolute bottom-0 left-1/2 w-1.5 h-28 bg-gradient-to-t from-slate-400 to-white origin-bottom transform -translate-x-1/2 transition-transform duration-1000 ease-in-out z-10"
+                                            className="absolute bottom-0 left-1/2 w-1.5 h-28 bg-gradient-to-t from-slate-400 to-white origin-bottom transform -translate-x-1/2 transition-transform duration-1000 ease-in-out z-10 will-change-transform"
                                             style={{ transform: `translateX(-50%) rotate(${(score / 100) * 180 - 90}deg)` }}
                                         >
                                             <div className="w-4 h-4 bg-white rounded-full absolute top-0 left-1/2 -translate-x-1/2 shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
@@ -134,13 +118,9 @@ export function ATSAnalysis() {
 
                                 {/* Status Text */}
                                 <div className="text-center mt-6">
-                                    <motion.p
-                                        className="text-xl font-bold tracking-widest uppercase text-cyan-400"
-                                        animate={{ opacity: [0.8, 1, 0.8] }}
-                                        transition={{ duration: 2, repeat: Infinity }}
-                                    >
-                                        ATS Ready
-                                    </motion.p>
+                                    <p className="text-3xl font-bold tracking-widest uppercase text-cyan-400 animate-pulse">
+                                        ATS Score
+                                    </p>
                                     <p className="text-sm text-slate-500 mt-2">Your resume is optimized efficiently.</p>
                                 </div>
                             </div>
@@ -148,21 +128,19 @@ export function ATSAnalysis() {
                             {/* Right Column: Analysis Detail */}
                             <div className="flex flex-col h-full justify-between">
                                 <div className="space-y-4">
-                                    {categories.map((cat, i) => (
+                                    {categoryScores.map((cat, i) => (
                                         <div key={i} className="group">
                                             <div className="flex justify-between items-center mb-1.5">
                                                 <span className="text-slate-200 text-xs font-semibold uppercase tracking-wide group-hover:text-white transition-colors">{cat.name}</span>
-                                                <span className={`${cat.labelColor} text-xs font-bold`}>{cat.score}/{cat.max}</span>
+                                                <span className={`${cat.labelColor} text-xs font-bold`}>{cat.currentScore}/{cat.max}</span>
                                             </div>
                                             <div className="h-1.5 w-full bg-slate-800/80 rounded-full overflow-hidden backdrop-blur-sm">
-                                                <motion.div
-                                                    initial={{ width: 0 }}
-                                                    animate={{ width: `${(cat.score / cat.max) * 100}%` }}
-                                                    transition={{ duration: 1, delay: i * 0.1 }}
-                                                    className={`h-full ${cat.color} rounded-full relative shadow-[0_0_10px_rgba(34,211,238,0.4)]`}
+                                                <div
+                                                    className={`h-full ${cat.color} rounded-full relative shadow-[0_0_10px_rgba(34,211,238,0.4)] transition-all duration-1000 ease-out`}
+                                                    style={{ width: `${(cat.currentScore / cat.max) * 100}%` }}
                                                 >
                                                     <div className="absolute inset-0 bg-white/20"></div>
-                                                </motion.div>
+                                                </div>
                                             </div>
                                         </div>
                                     ))}
@@ -194,8 +172,9 @@ export function ATSAnalysis() {
 
                         </div>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </section>
     );
 }
+
