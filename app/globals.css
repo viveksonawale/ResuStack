@@ -262,7 +262,7 @@
 }
 
 @utility animate-fade-in-up {
-  animation: fade-in-up 0.8s ease-out forwards;
+  animation: fade-in-up 0.4s ease-out forwards;
 }
 
 @utility animate-shimmer {
@@ -281,9 +281,7 @@
   animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@utility animate-fade-in-up {
-  animation: fade-in-up 0.6s ease-out forwards;
-}
+
 
 
 @keyframes text-glow-pulse {
@@ -579,3 +577,30 @@
 @utility animate-aurora-4 {
   animation: aurora-border 6s ease-in-out infinite, aurora-4 13s ease-in-out infinite alternate;
 }
+
+@layer base {
+  @media print {
+
+    body,
+    html,
+    #root,
+    #__next {
+      height: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: visible !important;
+      background: white !important;
+      color: black !important;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+  }
+}
+
+/* .html2canvas-fix {
+  --background: #ffffff;
+  --primary: #3b82f6; /* Use HEX instead of lab/oklch 
+} */

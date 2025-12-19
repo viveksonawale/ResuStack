@@ -5,6 +5,9 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModalProvider } from "@/components/providers/modal-provider";
 
+
+import { UserProvider } from "@/components/providers/user-provider";
+
 const poppins = Poppins({
     subsets: ["latin"],
     variable: "--font-poppins",
@@ -52,6 +55,10 @@ export const viewport = {
     ],
 };
 
+
+
+// ... existing imports
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -67,9 +74,11 @@ export default function RootLayout({
                     forcedTheme="dark"
                     disableTransitionOnChange
                 >
-                    <ModalProvider>
-                        {children}
-                    </ModalProvider>
+                    <UserProvider>
+                        <ModalProvider>
+                            {children}
+                        </ModalProvider>
+                    </UserProvider>
                 </ThemeProvider>
             </body>
         </html>

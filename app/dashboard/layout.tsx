@@ -1,71 +1,169 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
-import { FileText, LayoutTemplate, Settings, LogOut, Plus, User } from "lucide-react";
+import {
+  FileText,
+  LayoutTemplate,
+  Settings,
+  PieChart,
+  FolderOpen,
+  Menu,
+} from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
+import { useUser } from "@/components/providers/user-provider";
+import { UserProfile } from "@/components/dashboard/UserProfile";
+import { SettingsPanel } from "@/components/dashboard/SettingsPanel";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const sidebarLinks = [
-    { name: "My Resumes", href: "/dashboard", icon: FileText },
-    { name: "Templates", href: "/dashboard/templates", icon: LayoutTemplate },
-    { name: "Settings", href: "/dashboard/settings", icon: Settings },
+  { name: "Dashboard", href: "/dashboard", icon: LayoutTemplate },
+  { name: "My Files", href: "/dashboard/files", icon: FolderOpen },
+  { name: "Cover Letter", href: "/dashboard/cover-letter", icon: FileText },
+  { name: "ATS Analysis", href: "/dashboard/ats", icon: PieChart },
 ];
 
-export default function DashboardLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    return (
-        <div className="flex min-h-screen flex-col md:flex-row">
-            {/* Sidebar */}
-            <aside className="w-full md:w-64 border-r bg-muted/20 flex flex-col">
-                <div className="h-16 flex items-center px-6 border-b">
-                    <Logo />
-                </div>
-                <div className="flex-1 py-6 px-4 space-y-2">
-                    <Link href="/builder">
-                        <Button className="w-full justify-start mb-6" size="lg">
-                            <Plus className="mr-2 h-4 w-4" /> New Resume
-                        </Button>
-                    </Link>
-                    <nav className="space-y-1">
-                        {sidebarLinks.map((link) => (
-                            <Link key={link.name} href={link.href}>
-                                <Button variant="ghost" className="w-full justify-start">
-                                    <link.icon className="mr-2 h-4 w-4" />
-                                    {link.name}
-                                </Button>
-                            </Link>
-                        ))}
-                    </nav>
-                </div>
-                <div className="p-4 border-t">
-                    <div className="flex items-center gap-3 mb-4 px-2">
-                        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                            JD
-                        </div>
-                        <div className="text-sm">
-                            <p className="font-medium">John Doe</p>
-                            <p className="text-xs text-muted-foreground">john@example.com</p>
-                        </div>
-                    </div>
-                    <Button variant="outline" className="w-full justify-start text-muted-foreground">
-                        <LogOut className="mr-2 h-4 w-4" /> Sign Out
-                    </Button>
-                </div>
-            </aside>
+function DashboardContent({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const { setSettingsOpen } = useUser();
 
-            {/* Main Content */}
-            <main className="flex-1 flex flex-col">
-                <header className="h-16 border-b flex items-center justify-between px-6 md:px-8">
-                    <h1 className="font-semibold text-lg">Dashboard</h1>
-                    <div className="md:hidden">
-                        {/* Mobile menu trigger would go here */}
-                    </div>
-                </header>
-                <div className="flex-1 p-6 md:p-8 overflow-auto">
-                    {children}
-                </div>
-            </main>
+  // Get current page title
+  const currentPath = sidebarLinks.find((link) => link.href === pathname);
+  const pageTitle = currentPath ? currentPath.name : "Dashboard";
+
+  return (
+    <div className="flex min-h-screen flex-col md:flex-row bg-background">
+      <SettingsPanel />
+
+      {/* Sidebar */}
+      <aside className="hidden md:flex w-64 border-r border-white/10 bg-[#0a0a0a]/50 backdrop-blur-md flex-col shrink-0">
+        <div className="h-16 flex items-center px-6 border-b border-white/10">
+          <Logo />
         </div>
-    );
+
+        <div className="flex-1 py-6 px-4 space-y-2 ">
+          <nav className="space-y-1">
+            {sidebarLinks.map((link) => (
+              <Button
+                key={link.name}
+                asChild
+                variant="ghost"
+                className={cn(
+                  "text-[14px] w-full justify-start text-muted-foreground hover:text-white hover:bg-white/5",
+                  pathname === link.href && "text-white bg-white/10"
+                )}
+              >
+                <Link href={link.href} className="flex items-center gap-2">
+                  <link.icon className="h-4 w-4 shrink-0" />
+                  <span>{link.name}</span>
+                </Link>
+              </Button>
+            ))}
+          </nav>
+        </div>
+
+        <div className="p-4 border-t border-white/10 space-y-2">
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-muted-foreground hover:text-white hover:bg-white/5"
+            onClick={() => setSettingsOpen(true)}
+          >
+            <Settings className="mr-2 h-4 w-4" /> Settings
+          </Button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header className="h-16 border-b border-white/10 bg-[#0a0a0a] flex items-center justify-between px-6 md:px-8 shrink-0 z-50 sticky top-0">
+          <div className="flex items-center gap-4">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden -ml-2 text-white hover:bg-white/10"
+                >
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="left"
+                className="w-full h-[45vh] sm:max-w-none border-r border-white/10 p-0 text-white"
+                style={{ backgroundColor: "#0f111a" }}
+              >
+                <div className="h-16 flex items-center px-6 border-b border-white/10">
+                  <Logo />
+                </div>
+                <div className="py-6 px-4 space-y-2">
+                  <nav className="space-y-1">
+                    {sidebarLinks.map((link) => (
+                      <SheetClose asChild key={link.name}>
+                        <Button
+                          asChild
+                          variant="ghost"
+                          className={cn(
+                            "w-full justify-start text-muted-foreground hover:text-white hover:bg-white/5",
+                            pathname === link.href && "text-white bg-white/10"
+                          )}
+                        >
+                          <Link
+                            href={link.href}
+                            className="flex items-center gap-2"
+                          >
+                            <link.icon className="h-4 w-4 shrink-0" />
+                            <span className="truncate">{link.name}</span>
+                          </Link>
+                        </Button>
+                      </SheetClose>
+                    ))}
+                  </nav>
+                  <div className="pt-4 mt-4 border-t border-white/10">
+                    <SheetClose asChild>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-muted-foreground hover:text-white hover:bg-white/5"
+                        onClick={() => setSettingsOpen(true)}
+                      >
+                        <Settings className="mr-2 h-4 w-4" /> Settings
+                      </Button>
+                    </SheetClose>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+            <h1 className="font-semibold text-lg animate-fade-in-up">
+              {pageTitle}
+            </h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <UserProfile />
+          </div>
+        </header>
+        <div className="flex-1 overflow-auto bg-x/5 relative">
+          {/* Background Effects */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+          </div>
+          <div className="relative z-10 p-6 md:p-8">{children}</div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <DashboardContent>{children}</DashboardContent>;
 }
