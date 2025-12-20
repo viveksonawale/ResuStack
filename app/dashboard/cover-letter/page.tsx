@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Copy, Eye, Lock, Sparkles, Printer, Save } from "lucide-react";
+import { Sparkles, Save } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   TemplateSelector,
@@ -20,7 +20,6 @@ import { ChevronLeft } from "lucide-react";
 import { Toast, useToast } from "@/components/ui/toast";
 import { useUser } from "@/components/providers/user-provider";
 import { SaveFileDialog } from "@/components/shared/SaveFileDialog";
-import html2pdf from "html2pdf.js";
 
 export default function CoverLetterPage() {
   const { user } = useUser();
@@ -116,31 +115,31 @@ export default function CoverLetterPage() {
     displayToast("Cover letter saved to My Files!", "success");
   };
 
-  const handlePrint = () => {
-  const element = document.getElementById("resume-export");
-  if (!element) {
-    console.error("Export element not found");
-    return;
-  }
+//   const handlePrint = () => {
+//   const element = document.getElementById("resume-export");
+//   if (!element) {
+//     console.error("Export element not found");
+//     return;
+//   }
 
-  html2pdf()
-    .set({
-      margin: 0,
-      filename: `Cover-Letter-${data.company || "Draft"}.pdf`,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-      },
-      jsPDF: {
-        unit: "mm",
-        format: "a4",
-        orientation: "portrait",
-      },
-    })
-    .from(element)
-    .save();
-};
+//   html2pdf()
+//     .set({
+//       margin: 0,
+//       filename: `Cover-Letter-${data.company || "Draft"}.pdf`,
+//       image: { type: "jpeg", quality: 0.98 },
+//       html2canvas: {
+//         scale: 2,
+//         useCORS: true,
+//       },
+//       jsPDF: {
+//         unit: "mm",
+//         format: "a4",
+//         orientation: "portrait",
+//       },
+//     })
+//     .from(element)
+//     .save();
+// };
 
 
   return (
@@ -191,13 +190,13 @@ export default function CoverLetterPage() {
               title="Save Cover Letter"
             />
            
-            <Button
+            {/* <Button
               onClick={handlePrint}
               size="sm"
               className="bg-white/10 text-white hover:bg-white/20"
             >
               <Printer className="h-4 w-4 mr-2" /> PDF
-            </Button>
+            </Button> */}
           </div>
         )}
       </header>
@@ -317,45 +316,7 @@ export default function CoverLetterPage() {
 </div>
 
         </div>
-      </div>
-
-      {/* Print Styles */}
-      <style jsx global>{`
-        @media print {
-          @page {
-            margin: 0;
-            size: auto;
-          }
-          body * {
-            visibility: hidden;
-          }
-          #cl-preview,
-          #cl-preview * {
-            visibility: visible;
-          }
-          #cl-preview {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            z-index: 9999;
-            background: white;
-            overflow: visible;
-          }
-          /* Reset transforms */
-          #cl-preview-container,
-          #cl-preview-wrapper {
-            transform: none !important;
-            margin: 0 !important;
-            width: 100% !important;
-            max-width: none !important;
-            padding: 0 !important;
-          }
-        }
-      `}</style>
+      </div>     
     </div>
   );
 }

@@ -22,6 +22,7 @@ import { UserProfile } from "@/components/dashboard/UserProfile";
 import { SettingsPanel } from "@/components/dashboard/SettingsPanel";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { DashboardFileProvider } from "@/components/providers/dashboard-file-provider";
 
 const sidebarLinks = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutTemplate },
@@ -39,7 +40,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   const pageTitle = currentPath ? currentPath.name : "Dashboard";
 
   return (
-    <div className="flex min-h-screen flex-col md:flex-row bg-background">
+    <div className="flex h-screen flex-col md:flex-row bg-background">
       <SettingsPanel />
 
       {/* Sidebar */}
@@ -165,5 +166,9 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <DashboardContent>{children}</DashboardContent>;
+  return (
+    <DashboardFileProvider>
+      <DashboardContent>{children}</DashboardContent>
+    </DashboardFileProvider>
+  );
 }

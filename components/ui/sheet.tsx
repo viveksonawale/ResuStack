@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -19,25 +20,30 @@ const Sheet = ({ children }: { children: React.ReactNode }) => {
     )
 }
 
-const SheetTrigger = ({
-    className,
-    children,
-    asChild,
-    ...props
-}: React.HTMLAttributes<HTMLButtonElement> & { asChild?: boolean }) => {
+const SheetTrigger = React.forwardRef<
+    HTMLButtonElement,
+    React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
+>(({ className, children, asChild = false, ...props }, ref) => {
     const context = React.useContext(SheetContext)
     if (!context) throw new Error("SheetTrigger must be used within Sheet")
 
+    const Comp = asChild ? Slot : "button"
+
     return (
-        <button
+        <Comp
+            ref={ref}
             className={cn(className)}
-            onClick={() => context.setOpen(true)}
+            onClick={(e) => {
+                context.setOpen(true)
+                if (props.onClick) props.onClick(e)
+            }}
             {...props}
         >
             {children}
-        </button>
+        </Comp>
     )
-}
+})
+SheetTrigger.displayName = "SheetTrigger"
 
 const SheetContent = React.forwardRef<
     HTMLDivElement,

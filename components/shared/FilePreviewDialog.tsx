@@ -13,35 +13,7 @@ import { useRef, useState, useEffect } from "react";
 import { useUser } from "@/components/providers/user-provider";
 import { useToast } from "@/components/ui/toast";
 import { CoverLetterPreview } from "@/components/builder/CoverLetterPreview";
-import { 
-  Document, 
-  Page, 
-  Text, 
-  View, 
-  StyleSheet, 
-  PDFDownloadLink 
-} from '@react-pdf/renderer';
-
-// --- PDF STYLES ---
-const styles = StyleSheet.create({
-  page: { padding: 30, backgroundColor: '#ffffff' },
-  section: { marginBottom: 10 },
-  name: { fontSize: 24, fontWeight: 'bold', color: '#2563eb' },
-  text: { fontSize: 12, marginBottom: 5 }
-});
-
-// --- PDF DOCUMENT COMPONENT ---
-const MyResumePDF = ({ data }: { data: any }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text style={styles.name}>{data?.name || "Resume"}</Text>
-        <Text style={styles.text}>{data?.email || ""}</Text>
-        {/* You can map more data fields here later */}
-      </View>
-    </Page>
-  </Document>
-);
+// Imports removed
 
 interface FilePreviewDialogProps {
   open: boolean;
@@ -81,27 +53,28 @@ export function FilePreviewDialog({
               </span>
             )}
 
-            {/* ✅ NEW PDF DOWNLOAD LOGIC */}
-            {isClient && (isResume || isCoverLetter) ? (
-              <PDFDownloadLink
-                document={<MyResumePDF data={file.data} />}
-                fileName={`${file.name || 'document'}.pdf`}
-              >
-                {({ loading }) => (
-                  <Button size="sm" disabled={loading} className="bg-blue-600 hover:bg-blue-700">
-                    <Download className="h-4 w-4 lg:mr-2" />
-                    <span className="hidden lg:inline">
-                      {loading ? "Generating..." : "Download PDF"}
-                    </span>
-                  </Button>
-                )}
-              </PDFDownloadLink>
-            ) : (
-                <Button size="sm" variant="outline" disabled>
-                    <Download className="h-4 w-4 lg:mr-2" />
-                    <span className="hidden lg:inline">Download PDF</span>
-                </Button>
-            )}
+            {/* // --- PDF DOWNLOAD LOGIC --- */}
+            <Button
+              size="sm"
+              onClick={() => {
+                if (!file?.data) return;
+
+                // Use LocalStorage to pass data (Url length safe)
+                const payload = {
+                  type: isResume ? "resume" : "cover-letter",
+                  template: file.template || "clean",
+                  data: file.data
+                };
+                localStorage.setItem("print_payload", JSON.stringify(payload));
+
+                // Open print page (it will read from storage)
+                window.open("/print/resume", "_blank");
+              }}
+              className="text-primary text-black"
+            >
+              <Download className="h-4 w-4 lg:mr-2" />
+              <span className="hidden lg:inline">Download PDF</span>
+            </Button>
           </div>
         </DialogHeader>
 
@@ -137,15 +110,15 @@ export function FilePreviewDialog({
 
           {isATS && file.data && (
             <div className="max-w-3xl mx-auto space-y-6 text-white">
-               {/* ATS UI Content - Kept from your original code */}
-               <div className="grid grid-cols-3 gap-4">
-                  <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-blue-400">{file.data.score}/100</div>
-                    <div className="text-xs text-muted-foreground uppercase">Score</div>
-                  </div>
-                  {/* ... other ATS stats ... */}
-               </div>
-               {/* ... Strength/Weakness section ... */}
+              {/* ATS UI Content - Kept from your original code */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl text-center">
+                  <div className="text-2xl font-bold text-blue-400">{file.data.score}/100</div>
+                  <div className="text-xs text-muted-foreground uppercase">Score</div>
+                </div>
+                {/* ... other ATS stats ... */}
+              </div>
+              {/* ... Strength/Weakness section ... */}
             </div>
           )}
 

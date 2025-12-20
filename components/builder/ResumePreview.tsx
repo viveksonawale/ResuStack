@@ -3,18 +3,7 @@
 import { cn } from "@/lib/utils";
 import { TemplateId } from "./TemplateSelector";
 import { Mail, Phone, MapPin, Linkedin, Link as LinkIcon } from "lucide-react";
-
-export interface ResumeData {
-    fullName: string;
-    email: string;
-    phone: string;
-    location: string;
-    summary: string;
-    experience: { id: number; company: string; role: string; dates: string; description: string }[];
-    education: { id: number; school: string; degree: string; dates: string }[];
-    skills: string[];
-    projects: { id: number; title: string; description: string; tech: string }[];
-}
+import { ResumeData } from "@/lib/types";
 
 interface ResumePreviewProps {
     data: ResumeData;
@@ -23,10 +12,10 @@ interface ResumePreviewProps {
 
 export function ResumePreview({ data, template }: ResumePreviewProps) {
     return (
-        <div className="w-full h-full bg-white text-black overflow-y-auto print:overflow-visible" id="resume-preview">
+        <div className=" text-black overflow-y-auto print:overflow-visible" id="resume-preview">
             {/* A4 Container Aspect Ratio */}
             <div className={cn(
-                "aspect-[210/297] w-full min-h-[1000px] mx-auto bg-white p-[10mm] shadow-xl print:shadow-none transition-all duration-300",
+                "aspect-[210/297] border min-h-[200px] mx-auto bg-transparent p-[10mm] shadow-xl print:shadow-none transition-all duration-300",
                 template === "clean" && "font-serif",
                 template === "modern" && "font-sans",
                 template === "minimal" && "font-mono"

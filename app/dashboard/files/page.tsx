@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import { TableRowActions } from "@/components/dashboard/TableRowActions";
 import { Button } from "@/components/ui/button";
 import { FileText, Search, Layout, Filter } from "lucide-react";
@@ -6,15 +7,21 @@ import { useState, useEffect } from "react";
 import { FilePreviewDialog } from "@/components/shared/FilePreviewDialog";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/toast";
-
-const initialFiles = [
-    { id: 1, name: "Software_Engineer_Resume_vf.pdf", type: "Resume", template: "Modern Gradient", date: "Mar 10, 2024", status: "Ready", data: null },
-    { id: 2, name: "Cover_Letter_Spotify.docx", type: "Cover Letter", template: "Clean Formal", date: "Mar 12, 2024", status: "Draft", data: null },
-    { id: 3, name: "ATS_Report_March.pdf", type: "ATS Report", template: "-", date: "Mar 15, 2024", status: "Complete", data: null },
-];
+import { useDashboardFile } from "@/components/providers/dashboard-file-provider";
 
 export default function MyFilesPage() {
-    const [files, setFiles] = useState<any[]>(initialFiles);
+    const { files: globalFiles, setActiveFile } = useDashboardFile();
+
+    // Map global files to include UI-specific fields like 'status' and 'date'
+    // This preserves the exact UI while using the single source of truth
+    const MAPPED_FILES = globalFiles.map(f => ({
+        ...f,
+        date: f.updatedAt, // Map updatedAt to date
+        status: "Ready",   // Mock status for UI consistency
+        template: f.template || "-"
+    }));
+
+    const [files, setFiles] = useState<any[]>(MAPPED_FILES);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState<any | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
@@ -25,23 +32,14 @@ export default function MyFilesPage() {
         file.type.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    // Sync state if global files change (though unlikely in this mocked version)
     useEffect(() => {
-        const storedFiles = localStorage.getItem("my_files");
-        if (storedFiles) {
-            try {
-                const parsed = JSON.parse(storedFiles);
-                // Merge logic: prefer stored files for dynamic ones, keep initials as demo if needed?
-                // Actually initialFiles are just demos, we can just show them or not.
-                // Let's prepend stored files.
-                setFiles([...parsed, ...initialFiles]);
-            } catch (e) {
-                console.error("Error loading files", e);
-            }
-        }
-    }, []);
+        setFiles(MAPPED_FILES);
+    }, [globalFiles]);
 
     const handleView = (file: any) => {
         setSelectedFile(file);
+        setActiveFile(file.id); // Sync with Dashboard context
         setPreviewOpen(true);
     };
 
@@ -64,13 +62,8 @@ export default function MyFilesPage() {
     const handleDelete = (id: any) => {
         const newFiles = files.filter(f => f.id !== id);
         setFiles(newFiles);
-        // Persist deletion
-        // We only persist the ones that came from local storage (not initial IDs 1,2,3 ideally)
-        // But for simplicity let's just save the new list excluding initial demos if we want to be strict,
-        // or just re-save the non-initial ones.
-        // A simpler way for this mock: just update localStorage with the subset of files that are NOT in initialFiles.
-        const filesToPersist = newFiles.filter(f => !initialFiles.find(i => i.id === f.id));
-        localStorage.setItem("my_files", JSON.stringify(filesToPersist));
+        // Persist deletion (simplified for mock)
+        localStorage.setItem("my_files", JSON.stringify(newFiles));
     };
 
     const handleDownload = (file: any) => {

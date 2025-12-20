@@ -14,11 +14,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { Settings, LogOut, User as UserIcon, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signOut } from "@/lib/fakeAuth";
 import { cn } from "@/lib/utils";
 
 export function UserProfile() {
     const { user, setSettingsOpen } = useUser();
+    const router = useRouter();
     const initials = `${user.firstName[0]}${user.lastName[0]}`;
+
+    const handleLogout = () => {
+        signOut();
+        router.push("/");
+    };
 
     return (
         <DropdownMenu>
@@ -63,14 +71,16 @@ export function UserProfile() {
                         <span>Settings</span>
                     </DropdownMenuItem> */}
                     {user.accountType === "free" && (
-                        <DropdownMenuItem className="text-indigo-400 focus:text-indigo-300 focus:bg-indigo-500/10">
-                            <Sparkles className="mr-2 h-4 w-4" />
-                            <span>Upgrade to Pro</span>
-                        </DropdownMenuItem>
+                        <Link href="/payment">
+                            <DropdownMenuItem className="text-indigo-400 focus:text-indigo-300 focus:bg-indigo-500/10 cursor-pointer">
+                                <Sparkles className="mr-2 h-4 w-4" />
+                                <span>Upgrade to Pro</span>
+                            </DropdownMenuItem>
+                        </Link>
                     )}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator className="bg-white/10" />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500 focus:text-red-400 focus:bg-red-500/10">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                 </DropdownMenuItem>
