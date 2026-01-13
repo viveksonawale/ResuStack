@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import { User, Sparkles, BarChart, Download } from "lucide-react";
 
 const steps = [

@@ -59,6 +59,7 @@ const config: Config = {
         "gradient": "gradient 8s linear infinite",
         "float": "float 6s ease-in-out infinite",
         "glow": "glow 2s ease-in-out infinite alternate",
+        "marquee": "marquee 25s linear infinite",
       },
       keyframes: {
         fadeIn: {
@@ -84,6 +85,10 @@ const config: Config = {
         glow: {
           "0%": { boxShadow: "0 0 5px rgba(249, 115, 22, 0.4)" },
           "100%": { boxShadow: "0 0 20px rgba(249, 115, 22, 0.6)" },
+        },
+        marquee: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-100%)" },
         },
       },
       backdropBlur: {

@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { CheckCircle2, AlertCircle, ArrowRight, Lightbulb } from "lucide-react";
+
+import { CheckCircle2, Lightbulb, ScanLine } from "lucide-react";
 import { useAuth } from "./AuthContext";
 
 // Resume Content Component
@@ -104,7 +104,7 @@ function ResumeContent() {
                     <ul className="list-disc pl-5 space-y-1">
                         <li>Developed team schedule, including quality measurement for each major milestone (Microsoft Project)</li>
                         <li>Ensured team compliance to Design Control Procedures according to Code of Federal Regulations (CFR)</li>
-                        <li>Recognized by faculty audience as "Best Presentation" out of 15 teams</li>
+                        <li>Recognized by faculty audience as &quot;Best Presentation&quot; out of 15 teams</li>
                     </ul>
                 </div>
 
@@ -135,7 +135,7 @@ function ResumeContent() {
                 </div>
                 <div>
                     <div className="flex justify-between font-bold">
-                        <span>Kohl's, Gilbert, AZ: Sales Associate, Jewelry Department (16-24 hours/week)</span>
+                        <span>Kohl&apos;s, Gilbert, AZ: Sales Associate, Jewelry Department (16-24 hours/week)</span>
                         <span>Aug 2017 – Dec 2017</span>
                     </div>
                     <ul className="list-disc pl-5 mt-1">
@@ -228,122 +228,108 @@ function StatBar({ label, value, max, gradient }: { label: string; value: number
 export default function AIResumeBuilder() {
     const { openLogin } = useAuth();
     return (
-        <section id="ai-resume-builder" className="relative py-24 overflow-hidden bg-black">
+        <section id="ai-resume-builder" className="relative pt-12 pb-0 overflow-hidden bg-black scroll-mt-20">
             {/* Background Gradients */}
-            <div className="absolute top-0 right-1/4 w-96 h-96 bg-vercel-orange-500/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-vercel-amber-500/10 rounded-full blur-3xl" />
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-vercel-orange-500/10 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-vercel-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
                 <div className="text-center mb-16 px-4">
-                    <h2 className="text-3xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-zinc-500 mb-6">
+                    <h2 className="text-3xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-zinc-500 mb-6 tracking-tight">
                         AI Resume Builder
                     </h2>
-                    <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+                    <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
                         Our AI analyzes your resume just like an ATS system would, highlighting
                         strengths and areas for improvement to maximize your interview chances.
                     </p>
                 </div>
 
-                <div className="relative mx-auto mt-12 max-w-[1200px] h-[600px] sm:h-[700px]">
-                    {/* Resume Background */}
-                    <div className="absolute inset-0 flex justify-center overflow-hidden bg-zinc-900/50 rounded-xl border border-white/5">
-                        <div className="mt-8 scale-[0.55] sm:scale-[0.85] origin-top transition-all duration-500">
-                            <ResumeContent />
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+
+                    {/* LEFT COLUMN: Resume Preview (7 cols) */}
+                    <div className="xl:col-span-7 flex justify-center xl:justify-end order-2 xl:order-1">
+                        <div className="relative scale-[0.4] xs:scale-[0.45] sm:scale-[0.6] md:scale-[0.7] lg:scale-[0.8] origin-top xl:origin-top-left transition-all duration-300 hover:scale-[0.42] xs:hover:scale-[0.47] sm:hover:scale-[0.62] md:hover:scale-[0.72] lg:hover:scale-[0.82] group mb-[-600px] xs:mb-[-550px] sm:mb-[-450px] md:mb-[-350px] lg:mb-[-250px] xl:mb-0">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-vercel-orange-500 to-vercel-amber-500 rounded-lg opacity-0 group-hover:opacity-75 blur-md transition-opacity duration-300" />
+                            <div className="relative shadow-2xl">
+                                <ResumeContent />
+                            </div>
                         </div>
-                        {/* Gradient Overlay for Fade Effect */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent z-10" />
                     </div>
 
-                    {/* Floating Cards Container */}
-                    <div className="absolute inset-0 z-20 pointer-events-none">
+                    {/* RIGHT COLUMN: Analysis & Action (5 cols) */}
+                    <div className="xl:col-span-5 space-y-6 order-1 xl:order-2 w-full max-w-lg mx-auto xl:max-w-none xl:sticky xl:top-24">
 
-                        {/* Left Side: Insights */}
-                        <div
-                            className="absolute top-10 left-4 sm:left-10 w-[280px] sm:w-[320px] space-y-4 pointer-events-auto"
-                        >
-                            <div className="bg-zinc-900/90 backdrop-blur-xl border border-white/10 p-5 rounded-xl shadow-2xl">
-                                <div className="flex items-start gap-3 mb-2">
-                                    <CheckCircle2 className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />
-                                    <div>
-                                        <h3 className="text-sm font-bold text-emerald-500 mb-1">Strengths Identified</h3>
-                                        <p className="text-xs text-zinc-300 leading-relaxed">
-                                            Strong technical skills and quantified experience bullets with business impact.
-                                        </p>
-                                    </div>
+                        {/* 1. Overall Score Card */}
+                        <div className="bg-zinc-900/80 backdrop-blur-xl border border-white/10 p-6 rounded-2xl shadow-xl transform transition-all hover:border-emerald-500/30">
+                            <div className="flex items-center justify-between mb-6">
+                                <div>
+                                    <h3 className="text-xl font-bold text-white">Resume Score</h3>
+                                    <p className="text-zinc-400 text-sm">Your resume is optimized</p>
+                                </div>
+                                <div className="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                    <span className="text-xs font-bold text-emerald-400">Excellent</span>
                                 </div>
                             </div>
 
-                            <div className="bg-zinc-900/90 backdrop-blur-xl border border-white/10 p-5 rounded-xl shadow-2xl">
-                                <div className="flex items-start gap-3 mb-2">
-                                    <Lightbulb className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
-                                    <div>
-                                        <h3 className="text-sm font-bold text-amber-500 mb-1">Improvement Suggestions</h3>
-                                        <p className="text-xs text-zinc-300 leading-relaxed">
-                                            Emphasize technical leadership and add production-level projects.
-                                        </p>
-                                    </div>
+                            <div className="flex items-center gap-8 mb-8">
+                                <ScoreRing score={93} label="" />
+                                <div className="flex-1 space-y-3">
+                                    <StatBar label="ATS Parsability" value={25} max={25} gradient="from-emerald-500 to-emerald-400" />
+                                    <StatBar label="Impact & Content" value={32} max={35} gradient="from-emerald-500 to-emerald-400" />
+                                    <StatBar label="Keywords" value={20} max={25} gradient="from-amber-500 to-orange-500" />
                                 </div>
                             </div>
+                        </div>
 
-                            <div className="bg-zinc-900/90 backdrop-blur-xl border border-white/10 p-5 rounded-xl shadow-2xl">
-                                <div className="flex items-center gap-2 mb-3">
-                                    <ArrowRight className="w-4 h-4 text-emerald-400" />
-                                    <h3 className="text-sm font-bold text-emerald-400">How to Improve</h3>
-                                </div>
-                                <div className="space-y-3">
-                                    <div className="text-xs space-y-1">
-                                        <span className="text-red-400 font-semibold block">Weak:</span>
-                                        <p className="text-zinc-500 pl-2 border-l-2 border-red-900/50 italic">
-                                            'Developed a Spring Boot app with Docker on AWS EC2...'
+                        {/* 2. Insights Card */}
+                        <div className="bg-zinc-900/80 backdrop-blur-xl border border-white/10 p-6 rounded-2xl shadow-xl">
+                            <h3 className="text-lg font-bold text-white mb-4">AI Insights</h3>
+                            <div className="space-y-4">
+                                <div className="flex gap-4 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+                                    <div className="bg-emerald-500/10 p-2 rounded-lg h-fit">
+                                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-sm font-bold text-emerald-400 mb-1">Strong Impact</h4>
+                                        <p className="text-xs text-zinc-400 leading-relaxed">
+                                            Excellent use of action verbs and quantified metrics to demonstrate business value.
                                         </p>
                                     </div>
-                                    <div className="text-xs space-y-1">
-                                        <span className="text-emerald-400 font-semibold block">Better:</span>
-                                        <p className="text-zinc-300 pl-2 border-l-2 border-emerald-500/50">
-                                            'Reduced deployment overhead by 40% through containerizing Spring Boot apps...'
+                                </div>
+
+                                <div className="flex gap-4 p-4 rounded-xl bg-orange-500/5 border border-orange-500/10">
+                                    <div className="bg-orange-500/10 p-2 rounded-lg h-fit">
+                                        <Lightbulb className="w-5 h-5 text-orange-500" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-sm font-bold text-orange-400 mb-1">Suggestion</h4>
+                                        <p className="text-xs text-zinc-400 leading-relaxed">
+                                            Consider adding a section for &quot;Projects&quot; to highlight hands-on experience with modern tools.
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Right Side: Score */}
-                        <div
-                            className="absolute top-10 right-4 sm:right-10 w-[280px] sm:w-[320px] pointer-events-auto"
-                        >
-                            <div className="bg-zinc-900/90 backdrop-blur-xl border border-white/10 p-6 rounded-xl shadow-2xl">
-                                <div className="mb-6 flex justify-center">
-                                    <ScoreRing score={93} label="Excellent Resume!" />
-                                </div>
+                        {/* 3. Action Card */}
+                        <div className="bg-gradient-to-br from-zinc-900 to-black border border-white/10 p-6 rounded-2xl shadow-xl relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-vercel-orange-500/10 rounded-full blur-2xl group-hover:bg-vercel-orange-500/20 transition-all duration-500" />
 
-                                <div className="space-y-4 mb-6">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <BarChart className="w-4 h-4 text-zinc-400" />
-                                        <span className="text-sm font-bold text-white">Category Breakdown</span>
-                                    </div>
-                                    <StatBar label="ATS" value={25} max={25} gradient="from-emerald-500 to-emerald-400" />
-                                    <StatBar label="Content" value={32} max={35} gradient="from-emerald-500 to-emerald-400" />
-                                    <StatBar label="Writing" value={9} max={10} gradient="from-emerald-500 to-emerald-400" />
-                                    <StatBar label="Job Match" value={20} max={25} gradient="from-amber-500 to-orange-500" />
-                                    <StatBar label="Ready" value={5} max={5} gradient="from-emerald-500 to-emerald-400" />
-                                </div>
+                            <h3 className="text-lg font-bold text-white mb-2 relative z-10">Optimize Your Resume</h3>
+                            <p className="text-sm text-zinc-400 mb-6 relative z-10">
+                                Use our AI-powered builder to fix these issues and increase your interview chances by 3x.
+                            </p>
 
-                                <div className="mt-4 p-4 bg-white/5 rounded-lg border border-white/5">
-                                    <div className="mb-3">
-                                        <h4 className="text-sm font-bold text-white mb-1">AI Content Writer</h4>
-                                        <p className="text-[10px] text-zinc-400">
-                                            Generate metrics-driven bullets focused on technical skills and impact.
-                                        </p>
-                                    </div>
-                                    <button
-                                        onClick={openLogin}
-                                        className="w-full py-2 bg-gradient-to-r from-vercel-orange-500 to-vercel-amber-500 text-white text-xs font-bold rounded hover:shadow-[0_0_20px_rgba(234,88,12,0.5)] transition-all duration-300 flex items-center justify-center gap-2 group"
-                                    >
-                                        Build Your Resume Now
-                                        <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                                    </button>
-                                </div>
-                            </div>
+                            <button
+                                onClick={openLogin}
+                                className="w-full py-3.5 bg-gradient-to-r from-vercel-orange-500 to-vercel-amber-500 text-white font-bold rounded-xl shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 relative z-10"
+                            >
+                                <ScanLine className="w-4 h-4" />
+                                Build Optimized Resume
+                            </button>
                         </div>
 
                     </div>
@@ -353,24 +339,4 @@ export default function AIResumeBuilder() {
     );
 }
 
-// Helper icon
-function BarChart(props: any) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <line x1="12" x2="12" y1="20" y2="10" />
-            <line x1="18" x2="18" y1="20" y2="4" />
-            <line x1="6" x2="6" y1="20" y2="16" />
-        </svg>
-    )
-}
+

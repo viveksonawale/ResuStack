@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   title: "ResuStack AI - The Only Free AI Resume Builder You'll Ever Need",
   description:
     "Build ATS-optimized resumes with AI-powered content generation. Get past screening systems and land your dream job with ResuStack AI's intelligent resume builder.",
-  icons: {
-    icon: "/favicon.ico",
+  appleWebApp: {
+    title: "ResuStack",
   },
 };
 
@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white overflow-x-hidden`}
       >
         <SmoothScroll />
         {children}
